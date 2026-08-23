@@ -25,7 +25,12 @@ import {
   UserCheck,
   PanelLeftClose,
   PanelLeftOpen,
-  ChevronDown
+  Briefcase,
+  Package,
+  Boxes,
+  Handshake,
+  Target,
+  FileSpreadsheet
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { socketManager } from "@/lib/phoenix-socket";
@@ -51,59 +56,63 @@ export default function Sidebar() {
 
   const mainModules: MainMenuModule[] = [
     {
-      id: "finans",
-      name: "Genel Muhasebe",
+      id: "crm",
+      name: "CRM & Müşteri Yönetimi",
+      icon: Handshake,
+      subMenus: [
+        { name: "Genel Bakış (Dashboard)", href: "/", icon: LayoutDashboard },
+        { name: "Müşteri Portföyü (120)", href: "/defterler", icon: Building, badge: "Cari" },
+        { name: "Tedarikçiler (320)", href: "/defterler", icon: Building2 },
+        { name: "Satış Fırsatları & Pipeline", href: "/", icon: Target, badge: "Fırsatlar" },
+        { name: "Teklif & Sözleşme Yönetimi", href: "/fisler", icon: FileSpreadsheet },
+      ],
+    },
+    {
+      id: "inventory",
+      name: "Stok & Tedarik Zinciri",
+      icon: Boxes,
+      subMenus: [
+        { name: "Kasiyer POS Terminali", href: "/kasiyer", icon: ShoppingCart, badge: "Hızlı POS" },
+        { name: "Stok & Ürün Kartları (153)", href: "/hesap-plani", icon: Package, badge: "Stok" },
+        { name: "Depo & Şube Hareketleri", href: "/defterler", icon: Boxes },
+      ],
+    },
+    {
+      id: "accounting",
+      name: "Genel Muhasebe & Finans",
       icon: Layers,
       subMenus: [
-        { name: "Genel Bakış", href: "/", icon: LayoutDashboard },
         { name: "TDHP Hesap Planı", href: "/hesap-plani", icon: FolderTree, badge: "9 Sınıf" },
         { name: "Mahsup & Fiş İşlemleri", href: "/fisler", icon: FileText, badge: "Atomik" },
-        { name: "Canlı Mizan", href: "/mizan", icon: Zap, badge: "WebSocket" },
+        { name: "Ödeme & Tahsilat Fişleri", href: "/fisler", icon: CreditCard },
+        { name: "100 Kasa Defteri", href: "/defterler", icon: Wallet },
+        { name: "102 Banka Defteri", href: "/defterler", icon: Landmark },
       ],
     },
     {
-      id: "pos",
-      name: "Satış & Kasiyer POS",
-      icon: ShoppingCart,
-      subMenus: [
-        { name: "Kasiyer POS Terminali", href: "/kasiyer", icon: ShoppingCart, badge: "Hızlı" },
-      ],
-    },
-    {
-      id: "odeme",
-      name: "Ödeme & Tahsilat",
-      icon: CreditCard,
-      subMenus: [
-        { name: "Ödeme Fişleri (ÖD)", href: "/fisler", icon: CreditCard },
-        { name: "Tahsilat Fişleri (TH)", href: "/fisler", icon: Receipt },
-        { name: "100 Kasa Hareketleri", href: "/defterler", icon: Wallet },
-        { name: "102 Banka Hareketleri", href: "/defterler", icon: Landmark },
-      ],
-    },
-    {
-      id: "emanet",
+      id: "public",
       name: "Emanet & Teminat (Kamu)",
       icon: ShieldAlert,
       subMenus: [
         { name: "Emanet Hesapları (330)", href: "/hesap-plani", icon: ShieldAlert, badge: "Kamu" },
-        { name: "Teminat & Nazım (9)", href: "/hesap-plani", icon: FolderTree, badge: "Sınıf 9" },
+        { name: "Teminat & Nazım (9. Sınıf)", href: "/hesap-plani", icon: FolderTree, badge: "Nazım" },
       ],
     },
     {
-      id: "cari",
-      name: "Cari Hesap Yönetimi",
+      id: "hr",
+      name: "İK & Bordro Yönetimi",
       icon: Users,
       subMenus: [
-        { name: "Müşteriler (120)", href: "/defterler", icon: Building },
-        { name: "Tedarikçiler (320)", href: "/defterler", icon: Building2 },
-        { name: "Personel & Kasiyerler", href: "/defterler", icon: UserCheck },
+        { name: "Personel & Kasiyer Kartları", href: "/defterler", icon: UserCheck },
+        { name: "Personele Borçlar (335)", href: "/defterler", icon: Briefcase, badge: "Bordro" },
       ],
     },
     {
-      id: "raporlar",
-      name: "Mali Raporlar & Kapanış",
+      id: "reports",
+      name: "Mali Raporlar & Analiz",
       icon: BarChart3,
       subMenus: [
+        { name: "Canlı Mizan", href: "/mizan", icon: Zap, badge: "WebSocket" },
         { name: "Defter-i Kebir (Büyük Defter)", href: "/defterler", icon: BookOpen },
         { name: "Muavin (Cari) Defter", href: "/defterler", icon: Users },
         { name: "KDV Mahsuplaştırması", href: "/mizan", icon: Receipt },
@@ -142,7 +151,7 @@ export default function Sidebar() {
   const handleModuleClick = (modId: string) => {
     setActiveModuleId(modId);
     if (isCollapsed) {
-      setIsCollapsed(false); // Auto expand secondary menu when clicking a module
+      setIsCollapsed(false);
     }
   };
 
@@ -151,11 +160,11 @@ export default function Sidebar() {
       {/* 1. Primary Left Icon Rail */}
       <aside className="w-16 bg-[#0E1420] flex flex-col items-center justify-between py-4 border-r border-white/10 shrink-0 z-10">
         <div className="space-y-6 flex flex-col items-center">
-          {/* Logo Icon */}
+          {/* ERP Brand Logo Icon */}
           <Link
             href="/"
             className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-violet-500 flex items-center justify-center shadow-lg shadow-blue-500/20 hover:scale-105 transition-transform"
-            title="TDHP Ledger Engine"
+            title="LedgerERP & CRM Cloud"
           >
             <Building2 className="w-5 h-5 text-white" />
           </Link>
@@ -202,17 +211,17 @@ export default function Sidebar() {
             className={`w-3 h-3 rounded-full border-2 border-slate-900 ${
               isConnected ? "bg-emerald-400 animate-pulse" : "bg-rose-500"
             }`}
-            title={isConnected ? "Elixir WebSocket Canlı Bağlantı" : "API Bekleniyor"}
+            title={isConnected ? "Elixir Phoenix Engine Canlı" : "API Bekleniyor"}
           />
         </div>
       </aside>
 
-      {/* 2. Secondary Sub-Menu Panel (Collapsible / Daralabilir Panel) */}
+      {/* 2. Secondary Sub-Menu Panel (Collapsible) */}
       <aside
         className={`glass-panel flex flex-col justify-between p-4 overflow-y-auto transition-all duration-300 ${
           isCollapsed
             ? "w-0 opacity-0 p-0 border-none pointer-events-none"
-            : "w-60 opacity-100"
+            : "w-64 opacity-100"
         }`}
       >
         <div className="space-y-5">
@@ -220,7 +229,7 @@ export default function Sidebar() {
           <div className="border-b border-white/10 pb-3 flex items-center justify-between">
             <div className="truncate">
               <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">
-                Modül
+                ERP / CRM Modülü
               </div>
               <h2 className="text-xs font-bold text-white flex items-center space-x-2 truncate">
                 <activeModule.icon className="w-4 h-4 text-blue-400 shrink-0" />
@@ -240,7 +249,7 @@ export default function Sidebar() {
           {/* Sub-menu List */}
           <nav className="space-y-1">
             <div className="px-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
-              Alt Menüler
+              Alt Modüller & Ekranlar
             </div>
 
             {activeModule.subMenus.map((sub, idx) => {
@@ -277,10 +286,10 @@ export default function Sidebar() {
         {/* Footer info */}
         <div className="pt-4 border-t border-white/10 space-y-2">
           <div className="p-2.5 rounded-xl bg-slate-900/80 border border-white/5 space-y-1">
-            <div className="text-[10px] text-slate-400 font-semibold">Genel & Kamu Muhasebesi</div>
+            <div className="text-[10px] text-slate-400 font-semibold">LedgerERP & CRM Cloud</div>
             <div className="text-[10px] font-mono text-emerald-400 flex items-center space-x-1">
               <Zap className="w-3 h-3 text-amber-400" />
-              <span>TDHP & Emanet Motoru</span>
+              <span>Elixir TDHP Finans Motoru</span>
             </div>
           </div>
         </div>
