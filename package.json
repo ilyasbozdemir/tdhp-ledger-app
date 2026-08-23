@@ -5,6 +5,7 @@
     "dev:web": "pnpm --filter web dev",
     "build:web": "pnpm --filter web build",
     "dev:backend": "cd apps/backend && mix phx.server",
-    "test:backend": "cd apps/backend && mix test"
+    "test:backend": "cd apps/backend && mix test",
+    "dev:desktop": "pnpm --filter desktop start"
   }
 }
