@@ -87,9 +87,9 @@ export default function Sidebar() {
       name: "CRM & Müşteri Yönetimi",
       icon: Handshake,
       subMenus: [
-        { name: "CRM Müşteri Portföyü", href: "/crm", icon: Handshake, badge: "CRM 120" },
+        { name: "Müşteri Portföyü", href: "/crm", icon: Handshake, badge: "Müşteriler" },
         { name: "Satış Fırsatları & Teklifler", href: "/teklifler", icon: Target, badge: "Pipeline" },
-        { name: "Tedarikçi Kartları (320)", href: "/crm", icon: Building2 },
+        { name: "Tedarikçi Kartları", href: "/crm", icon: Building2, badge: "Tedarikçiler" },
       ],
     },
     {
@@ -97,7 +97,7 @@ export default function Sidebar() {
       name: "Stok & Depo (ERP)",
       icon: Boxes,
       subMenus: [
-        { name: "Stok & Ürün Kartları (153)", href: "/stok", icon: Package, badge: "Stok 153" },
+        { name: "Stok & Ürün Kartları", href: "/stok", icon: Package, badge: "Stok" },
         { name: "Kasiyer POS Terminali", href: "/kasiyer", icon: ShoppingCart, badge: "Hızlı POS" },
         { name: "Depo Transferleri & Lojistik", href: "/depo", icon: ArrowLeftRight, badge: "Depo" },
       ],
@@ -127,8 +127,8 @@ export default function Sidebar() {
       name: "Emanet & Teminat (Kamu)",
       icon: ShieldAlert,
       subMenus: [
-        { name: "Emanet & Nazım İşlemleri", href: "/emanet", icon: ShieldAlert, badge: "Kamu 330" },
-        { name: "Teminat & Nazım (9. Sınıf)", href: "/emanet", icon: FolderTree, badge: "Sınıf 9" },
+        { name: "Emanet Hesaplar", href: "/emanet", icon: ShieldAlert, badge: "Emanet" },
+        { name: "Teminat & Nazım Hesaplar", href: "/emanet", icon: FolderTree, badge: "Nazım" },
       ],
     },
     {
@@ -136,8 +136,8 @@ export default function Sidebar() {
       name: "HRM & Bordro Yönetimi",
       icon: Users,
       subMenus: [
-        { name: "Personel & İK Modülü", href: "/hrm", icon: UserCheck, badge: "HRM" },
-        { name: "Personele Borçlar (335)", href: "/hrm", icon: Briefcase, badge: "Bordro" },
+        { name: "Personel & İK Modülü", href: "/hrm", icon: UserCheck, badge: "Personel" },
+        { name: "Maaş Bordro Yönetimi", href: "/hrm", icon: Briefcase, badge: "Bordro" },
       ],
     },
     {
@@ -197,7 +197,7 @@ export default function Sidebar() {
           <Link
             href="/"
             className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-violet-500 flex items-center justify-center shadow-lg shadow-blue-500/20 hover:scale-105 transition-transform"
-            title="LedgerERP, CRM & HRM Suite"
+            title="LedgerERP Suite"
           >
             <Building2 className="w-5 h-5 text-white" />
           </Link>
