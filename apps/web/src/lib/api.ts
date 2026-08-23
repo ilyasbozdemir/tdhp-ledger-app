@@ -12,11 +12,21 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T>
       ...options,
     });
 
-    const json = await res.json();
-    if (!res.ok) {
-      throw new Error(json.error || json.message || "Bir API hatası oluştu.");
+    const text = await res.text();
+    let json: any = {};
+    try {
+      json = JSON.parse(text);
+    } catch {
+      if (!res.ok) {
+        throw new Error(`Sunucu Hatası (${res.status}): Yanıt JSON formatında değil.`);
+      }
     }
-    return json.data;
+
+    if (!res.ok) {
+      throw new Error(json.error || json.message || `API Hatası (${res.status})`);
+    }
+
+    return json.data !== undefined ? json.data : json;
   } catch (err: any) {
     if (err.name === "TypeError" || err.message === "Failed to fetch") {
       throw new Error("Elixir Phoenix API sunucusuna (http://localhost:4000) bağlanılamadı. Lütfen 'pnpm dev:backend' çalıştırın.");
