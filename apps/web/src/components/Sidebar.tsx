@@ -19,6 +19,12 @@ import {
   TrendingUp,
   PieChart,
   Layers,
+  ShieldAlert,
+  CreditCard,
+  Building,
+  UserCheck,
+  PanelLeftClose,
+  PanelLeftOpen,
   ChevronDown
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -41,16 +47,18 @@ interface MainMenuModule {
 export default function Sidebar() {
   const pathname = usePathname();
   const [isConnected, setIsConnected] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const mainModules: MainMenuModule[] = [
     {
       id: "finans",
-      name: "Finans & Muhasebe",
+      name: "Genel Muhasebe",
       icon: Layers,
       subMenus: [
         { name: "Genel Bakış", href: "/", icon: LayoutDashboard },
         { name: "TDHP Hesap Planı", href: "/hesap-plani", icon: FolderTree, badge: "9 Sınıf" },
-        { name: "Muhasebe Fişleri", href: "/fisler", icon: FileText, badge: "Ecto.Multi" },
+        { name: "Mahsup & Fiş İşlemleri", href: "/fisler", icon: FileText, badge: "Atomik" },
+        { name: "Canlı Mizan", href: "/mizan", icon: Zap, badge: "WebSocket" },
       ],
     },
     {
@@ -58,34 +66,53 @@ export default function Sidebar() {
       name: "Satış & Kasiyer POS",
       icon: ShoppingCart,
       subMenus: [
-        { name: "Kasiyer POS Ekranı", href: "/kasiyer", icon: ShoppingCart, badge: "Canlı" },
+        { name: "Kasiyer POS Terminali", href: "/kasiyer", icon: ShoppingCart, badge: "Hızlı" },
       ],
     },
     {
-      id: "defterler",
-      name: "Resmi Defterler",
-      icon: BookOpen,
+      id: "odeme",
+      name: "Ödeme & Tahsilat",
+      icon: CreditCard,
       subMenus: [
-        { name: "Defter-i Kebir", href: "/defterler", icon: BookOpen },
-        { name: "Muavin (Cari) Defter", href: "/defterler", icon: Users },
-        { name: "100 Kasa Defteri", href: "/defterler", icon: Wallet },
-        { name: "102 Banka Defteri", href: "/defterler", icon: Landmark },
+        { name: "Ödeme Fişleri (ÖD)", href: "/fisler", icon: CreditCard },
+        { name: "Tahsilat Fişleri (TH)", href: "/fisler", icon: Receipt },
+        { name: "100 Kasa Hareketleri", href: "/defterler", icon: Wallet },
+        { name: "102 Banka Hareketleri", href: "/defterler", icon: Landmark },
       ],
     },
     {
-      id: "mizan",
-      name: "Mizan & Finansal Tablolar",
+      id: "emanet",
+      name: "Emanet & Teminat (Kamu)",
+      icon: ShieldAlert,
+      subMenus: [
+        { name: "Emanet Hesapları (330)", href: "/hesap-plani", icon: ShieldAlert, badge: "Kamu" },
+        { name: "Teminat & Nazım (9)", href: "/hesap-plani", icon: FolderTree, badge: "Sınıf 9" },
+      ],
+    },
+    {
+      id: "cari",
+      name: "Cari Hesap Yönetimi",
+      icon: Users,
+      subMenus: [
+        { name: "Müşteriler (120)", href: "/defterler", icon: Building },
+        { name: "Tedarikçiler (320)", href: "/defterler", icon: Building2 },
+        { name: "Personel & Kasiyerler", href: "/defterler", icon: UserCheck },
+      ],
+    },
+    {
+      id: "raporlar",
+      name: "Mali Raporlar & Kapanış",
       icon: BarChart3,
       subMenus: [
-        { name: "Canlı Mizan", href: "/mizan", icon: Zap, badge: "WebSocket" },
-        { name: "KDV Mahsuplaştırma", href: "/mizan", icon: Receipt },
+        { name: "Defter-i Kebir (Büyük Defter)", href: "/defterler", icon: BookOpen },
+        { name: "Muavin (Cari) Defter", href: "/defterler", icon: Users },
+        { name: "KDV Mahsuplaştırması", href: "/mizan", icon: Receipt },
         { name: "Gelir Tablosu", href: "/mizan", icon: TrendingUp },
         { name: "Bilanço", href: "/mizan", icon: PieChart },
       ],
     },
   ];
 
-  // Determine active main module based on URL pathname
   const initialActiveModule = mainModules.find((m) =>
     m.subMenus.some((s) => s.href === pathname)
   )?.id || mainModules[0].id;
@@ -112,10 +139,17 @@ export default function Sidebar() {
 
   const activeModule = mainModules.find((m) => m.id === activeModuleId) || mainModules[0];
 
+  const handleModuleClick = (modId: string) => {
+    setActiveModuleId(modId);
+    if (isCollapsed) {
+      setIsCollapsed(false); // Auto expand secondary menu when clicking a module
+    }
+  };
+
   return (
-    <div className="flex h-screen sticky top-0 shrink-0 border-r border-white/10 z-40">
-      {/* 1. Primary Left Icon Rail (Ana Menü İkon Sütunu) */}
-      <aside className="w-16 bg-[#0E1420] flex flex-col items-center justify-between py-4 border-r border-white/10 shrink-0">
+    <div className="flex h-screen sticky top-0 shrink-0 border-r border-white/10 z-40 transition-all duration-300">
+      {/* 1. Primary Left Icon Rail */}
+      <aside className="w-16 bg-[#0E1420] flex flex-col items-center justify-between py-4 border-r border-white/10 shrink-0 z-10">
         <div className="space-y-6 flex flex-col items-center">
           {/* Logo Icon */}
           <Link
@@ -134,7 +168,7 @@ export default function Sidebar() {
               return (
                 <button
                   key={mod.id}
-                  onClick={() => setActiveModuleId(mod.id)}
+                  onClick={() => handleModuleClick(mod.id)}
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all group relative ${
                     isSelected
                       ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-105"
@@ -143,7 +177,7 @@ export default function Sidebar() {
                   title={mod.name}
                 >
                   <Icon className="w-5 h-5" />
-                  
+
                   {/* Tooltip on hover */}
                   <span className="absolute left-14 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-white/10 z-50">
                     {mod.name}
@@ -154,8 +188,16 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Live Phoenix WebSocket Connection Badge */}
-        <div className="flex flex-col items-center space-y-1">
+        {/* Bottom Actions: Collapse Toggle & Live WebSocket Badge */}
+        <div className="flex flex-col items-center space-y-3">
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+            title={isCollapsed ? "Menüyü Genişlet" : "Menüyü Daralt"}
+          >
+            {isCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+          </button>
+
           <div
             className={`w-3 h-3 rounded-full border-2 border-slate-900 ${
               isConnected ? "bg-emerald-400 animate-pulse" : "bg-rose-500"
@@ -165,21 +207,34 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* 2. Secondary Sub-Menu Panel (Seçili Ana Menünün Alt Menü Listesi) */}
-      <aside className="w-56 glass-panel flex flex-col justify-between p-4 overflow-y-auto">
+      {/* 2. Secondary Sub-Menu Panel (Collapsible / Daralabilir Panel) */}
+      <aside
+        className={`glass-panel flex flex-col justify-between p-4 overflow-y-auto transition-all duration-300 ${
+          isCollapsed
+            ? "w-0 opacity-0 p-0 border-none pointer-events-none"
+            : "w-60 opacity-100"
+        }`}
+      >
         <div className="space-y-5">
           {/* Active Main Module Header */}
-          <div className="border-b border-white/10 pb-3">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
-              Ana Modül
-            </div>
-            <div className="flex items-center justify-between">
+          <div className="border-b border-white/10 pb-3 flex items-center justify-between">
+            <div className="truncate">
+              <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">
+                Modül
+              </div>
               <h2 className="text-xs font-bold text-white flex items-center space-x-2 truncate">
                 <activeModule.icon className="w-4 h-4 text-blue-400 shrink-0" />
                 <span className="truncate">{activeModule.name}</span>
               </h2>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             </div>
+
+            <button
+              onClick={() => setIsCollapsed(true)}
+              className="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5"
+              title="Daralt"
+            >
+              <PanelLeftClose className="w-3.5 h-3.5" />
+            </button>
           </div>
 
           {/* Sub-menu List */}
@@ -197,7 +252,7 @@ export default function Sidebar() {
                   href={sub.href}
                   className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
                     isActive
-                      ? "bg-blue-600/90 text-white font-bold shadow-md shadow-blue-600/20"
+                      ? "bg-gradient-to-r from-blue-600/90 to-indigo-600/90 text-white font-bold shadow-md shadow-blue-600/20"
                       : "text-slate-300 hover:text-white hover:bg-white/5"
                   }`}
                 >
@@ -207,7 +262,7 @@ export default function Sidebar() {
                   </div>
 
                   {sub.badge ? (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">
                       {sub.badge}
                     </span>
                   ) : (
@@ -222,10 +277,10 @@ export default function Sidebar() {
         {/* Footer info */}
         <div className="pt-4 border-t border-white/10 space-y-2">
           <div className="p-2.5 rounded-xl bg-slate-900/80 border border-white/5 space-y-1">
-            <div className="text-[10px] text-slate-400 font-semibold">TDHP Motoru</div>
+            <div className="text-[10px] text-slate-400 font-semibold">Genel & Kamu Muhasebesi</div>
             <div className="text-[10px] font-mono text-emerald-400 flex items-center space-x-1">
               <Zap className="w-3 h-3 text-amber-400" />
-              <span>Elixir & Phoenix API</span>
+              <span>TDHP & Emanet Motoru</span>
             </div>
           </div>
         </div>
