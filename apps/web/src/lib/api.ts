@@ -3,19 +3,26 @@ import { Account, CurrentAccount, Voucher, MizanReport, KebirLedger, LedgerEntry
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${endpoint}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-    ...options,
-  });
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+      },
+      ...options,
+    });
 
-  const json = await res.json();
-  if (!res.ok) {
-    throw new Error(json.error || json.message || "Bir API hatası oluştu.");
+    const json = await res.json();
+    if (!res.ok) {
+      throw new Error(json.error || json.message || "Bir API hatası oluştu.");
+    }
+    return json.data;
+  } catch (err: any) {
+    if (err.name === "TypeError" || err.message === "Failed to fetch") {
+      throw new Error("Elixir Phoenix API sunucusuna (http://localhost:4000) bağlanılamadı. Lütfen 'pnpm dev:backend' çalıştırın.");
+    }
+    throw err;
   }
-  return json.data;
 }
 
 export const api = {
