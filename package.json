@@ -1,0 +1,10 @@
+{
+  "name": "tdhp-ledger-app",
+  "private": true,
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "build:web": "pnpm --filter web build",
+    "dev:backend": "cd apps/backend && mix phx.server",
+    "test:backend": "cd apps/backend && mix test"
+  }
+}
