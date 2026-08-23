@@ -1,0 +1,5 @@
+config:
+  tdhp-ledger-infra:postgresPort: "5433"
+  tdhp-ledger-infra:rabbitmqPort: "15672"
+  tdhp-ledger-infra:phoenixPort: "4000"
+  tdhp-ledger-infra:nextPort: "3000"

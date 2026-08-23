@@ -4,6 +4,7 @@ Modern, yüksek performanslı, atomik fiş motoruna ve gerçek zamanlı WebSocke
 mimarisine sahip **Tek Düzen Hesap Planı (TDHP)** tabanlı muhasebe ve defter
 yönetim platformu.
 
+![IaC](https://img.shields.io/badge/IaC-Pulumi_TypeScript-violet)
 ![Architecture](https://img.shields.io/badge/Architecture-Monorepo-blue)
 ![Queue](https://img.shields.io/badge/Queue-RabbitMQ_3-orange)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL_16-blue)

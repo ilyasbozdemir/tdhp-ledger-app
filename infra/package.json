@@ -1,0 +1,14 @@
+{
+  "name": "tdhp-ledger-infra",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "private": true,
+  "dependencies": {
+    "@pulumi/docker": "^4.6.0",
+    "@pulumi/pulumi": "^3.153.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "typescript": "^5.7.0"
+  }
+}

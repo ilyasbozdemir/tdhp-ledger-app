@@ -14,6 +14,8 @@
     "docker:down": "docker compose down",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
-    "db:setup": "docker compose up -d && cd apps/backend && mix ecto.setup"
+    "db:setup": "docker compose up -d && cd apps/backend && mix ecto.setup",
+    "pulumi:up": "cd infra && pulumi up --yes",
+    "pulumi:down": "cd infra && pulumi destroy --yes"
   }
 }

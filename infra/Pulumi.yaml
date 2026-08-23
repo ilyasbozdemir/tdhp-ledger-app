@@ -1,0 +1,3 @@
+name: tdhp-ledger-infra
+runtime: nodejs
+description: Pulumi IaC Infrastructure for TDHP Ledger System (PostgreSQL, RabbitMQ, Elixir Phoenix API, Next.js Web)
