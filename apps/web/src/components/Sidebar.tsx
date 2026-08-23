@@ -30,7 +30,9 @@ import {
   Boxes,
   Handshake,
   Target,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Sun,
+  Moon
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { socketManager } from "@/lib/phoenix-socket";
@@ -53,6 +55,31 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [isConnected, setIsConnected] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    // Theme initialization
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    } else {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (isDarkMode) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      setIsDarkMode(false);
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      setIsDarkMode(true);
+    }
+  };
 
   const mainModules: MainMenuModule[] = [
     {
@@ -60,21 +87,31 @@ export default function Sidebar() {
       name: "CRM & Müşteri Yönetimi",
       icon: Handshake,
       subMenus: [
-        { name: "Genel Bakış (Dashboard)", href: "/", icon: LayoutDashboard },
+        { name: "CRM Ana Modül", href: "/crm", icon: Handshake, badge: "CRM" },
         { name: "Müşteri Portföyü (120)", href: "/defterler", icon: Building, badge: "Cari" },
         { name: "Tedarikçiler (320)", href: "/defterler", icon: Building2 },
-        { name: "Satış Fırsatları & Pipeline", href: "/", icon: Target, badge: "Fırsatlar" },
-        { name: "Teklif & Sözleşme Yönetimi", href: "/fisler", icon: FileSpreadsheet },
+        { name: "Satış Fırsatları", href: "/crm", icon: Target },
+        { name: "Teklif & Sözleşmeler", href: "/crm", icon: FileSpreadsheet },
       ],
     },
     {
       id: "inventory",
-      name: "Stok & Tedarik Zinciri",
+      name: "Stok & Depo Yönetimi",
       icon: Boxes,
       subMenus: [
+        { name: "Stok & Ürün Yönetimi", href: "/stok", icon: Package, badge: "Stok 153" },
         { name: "Kasiyer POS Terminali", href: "/kasiyer", icon: ShoppingCart, badge: "Hızlı POS" },
-        { name: "Stok & Ürün Kartları (153)", href: "/hesap-plani", icon: Package, badge: "Stok" },
-        { name: "Depo & Şube Hareketleri", href: "/defterler", icon: Boxes },
+        { name: "Depo & Şube Transferleri", href: "/stok", icon: Boxes },
+      ],
+    },
+    {
+      id: "payments",
+      name: "Ödeme & Tahsilat",
+      icon: CreditCard,
+      subMenus: [
+        { name: "Ödeme & Tahsilat Ekranı", href: "/odemeler", icon: CreditCard, badge: "ÖD / TH" },
+        { name: "100 Kasa Defteri", href: "/defterler", icon: Wallet },
+        { name: "102 Banka Defteri", href: "/defterler", icon: Landmark },
       ],
     },
     {
@@ -82,11 +119,9 @@ export default function Sidebar() {
       name: "Genel Muhasebe & Finans",
       icon: Layers,
       subMenus: [
+        { name: "Genel Bakış (Dashboard)", href: "/", icon: LayoutDashboard },
         { name: "TDHP Hesap Planı", href: "/hesap-plani", icon: FolderTree, badge: "9 Sınıf" },
-        { name: "Mahsup & Fiş İşlemleri", href: "/fisler", icon: FileText, badge: "Atomik" },
-        { name: "Ödeme & Tahsilat Fişleri", href: "/fisler", icon: CreditCard },
-        { name: "100 Kasa Defteri", href: "/defterler", icon: Wallet },
-        { name: "102 Banka Defteri", href: "/defterler", icon: Landmark },
+        { name: "Mahsup & Muhasebe Fişleri", href: "/fisler", icon: FileText, badge: "Atomik" },
       ],
     },
     {
@@ -94,17 +129,8 @@ export default function Sidebar() {
       name: "Emanet & Teminat (Kamu)",
       icon: ShieldAlert,
       subMenus: [
-        { name: "Emanet Hesapları (330)", href: "/hesap-plani", icon: ShieldAlert, badge: "Kamu" },
-        { name: "Teminat & Nazım (9. Sınıf)", href: "/hesap-plani", icon: FolderTree, badge: "Nazım" },
-      ],
-    },
-    {
-      id: "hr",
-      name: "İK & Bordro Yönetimi",
-      icon: Users,
-      subMenus: [
-        { name: "Personel & Kasiyer Kartları", href: "/defterler", icon: UserCheck },
-        { name: "Personele Borçlar (335)", href: "/defterler", icon: Briefcase, badge: "Bordro" },
+        { name: "Emanet & Nazım İşlemleri", href: "/emanet", icon: ShieldAlert, badge: "Kamu 330" },
+        { name: "Teminat & Nazım (9. Sınıf)", href: "/emanet", icon: FolderTree, badge: "Sınıf 9" },
       ],
     },
     {
@@ -116,8 +142,7 @@ export default function Sidebar() {
         { name: "Defter-i Kebir (Büyük Defter)", href: "/defterler", icon: BookOpen },
         { name: "Muavin (Cari) Defter", href: "/defterler", icon: Users },
         { name: "KDV Mahsuplaştırması", href: "/mizan", icon: Receipt },
-        { name: "Gelir Tablosu", href: "/mizan", icon: TrendingUp },
-        { name: "Bilanço", href: "/mizan", icon: PieChart },
+        { name: "Gelir Tablosu & Bilanço", href: "/mizan", icon: TrendingUp },
       ],
     },
   ];
@@ -156,15 +181,15 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="flex h-screen sticky top-0 shrink-0 border-r border-white/10 z-40 transition-all duration-300">
+    <div className="flex h-screen sticky top-0 shrink-0 border-r border-slate-200 dark:border-white/10 z-40 transition-all duration-300">
       {/* 1. Primary Left Icon Rail */}
-      <aside className="w-16 bg-[#0E1420] flex flex-col items-center justify-between py-4 border-r border-white/10 shrink-0 z-10">
+      <aside className="w-16 bg-slate-100 dark:bg-[#0E1420] flex flex-col items-center justify-between py-4 border-r border-slate-200 dark:border-white/10 shrink-0 z-10">
         <div className="space-y-6 flex flex-col items-center">
           {/* ERP Brand Logo Icon */}
           <Link
             href="/"
             className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-violet-500 flex items-center justify-center shadow-lg shadow-blue-500/20 hover:scale-105 transition-transform"
-            title="LedgerERP & CRM Cloud"
+            title="LedgerERP & CRM Suite"
           >
             <Building2 className="w-5 h-5 text-white" />
           </Link>
@@ -181,7 +206,7 @@ export default function Sidebar() {
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all group relative ${
                     isSelected
                       ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-105"
-                      : "text-slate-400 hover:text-white hover:bg-white/5"
+                      : "text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/5"
                   }`}
                   title={mod.name}
                 >
@@ -197,11 +222,20 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Bottom Actions: Collapse Toggle & Live WebSocket Badge */}
+        {/* Bottom Actions: Theme Switcher & Collapse Toggle & Live WebSocket Badge */}
         <div className="flex flex-col items-center space-y-3">
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center transition-colors"
+            title={isDarkMode ? "Aydınlık Mod (Light Mode)" : "Karanlık Mod (Dark Mode)"}
+          >
+            {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-600" />}
+          </button>
+
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+            className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center transition-colors"
             title={isCollapsed ? "Menüyü Genişlet" : "Menüyü Daralt"}
           >
             {isCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
@@ -216,7 +250,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* 2. Secondary Sub-Menu Panel (Collapsible) */}
+      {/* 2. Secondary Sub-Menu Panel */}
       <aside
         className={`glass-panel flex flex-col justify-between p-4 overflow-y-auto transition-all duration-300 ${
           isCollapsed
@@ -226,20 +260,20 @@ export default function Sidebar() {
       >
         <div className="space-y-5">
           {/* Active Main Module Header */}
-          <div className="border-b border-white/10 pb-3 flex items-center justify-between">
+          <div className="border-b border-slate-200 dark:border-white/10 pb-3 flex items-center justify-between">
             <div className="truncate">
               <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">
                 ERP / CRM Modülü
               </div>
-              <h2 className="text-xs font-bold text-white flex items-center space-x-2 truncate">
-                <activeModule.icon className="w-4 h-4 text-blue-400 shrink-0" />
+              <h2 className="text-xs font-bold text-slate-900 dark:text-white flex items-center space-x-2 truncate">
+                <activeModule.icon className="w-4 h-4 text-blue-500 dark:text-blue-400 shrink-0" />
                 <span className="truncate">{activeModule.name}</span>
               </h2>
             </div>
 
             <button
               onClick={() => setIsCollapsed(true)}
-              className="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5"
+              className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 rounded hover:bg-slate-100 dark:hover:bg-white/5"
               title="Daralt"
             >
               <PanelLeftClose className="w-3.5 h-3.5" />
@@ -262,16 +296,16 @@ export default function Sidebar() {
                   className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
                     isActive
                       ? "bg-gradient-to-r from-blue-600/90 to-indigo-600/90 text-white font-bold shadow-md shadow-blue-600/20"
-                      : "text-slate-300 hover:text-white hover:bg-white/5"
+                      : "text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5"
                   }`}
                 >
                   <div className="flex items-center space-x-2.5 truncate">
-                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-slate-400 group-hover:text-white"}`} />
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-slate-400 group-hover:text-blue-500 dark:group-hover:text-white"}`} />
                     <span className="truncate">{sub.name}</span>
                   </div>
 
                   {sub.badge ? (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 border border-blue-500/20 dark:border-blue-500/30 shrink-0">
                       {sub.badge}
                     </span>
                   ) : (
@@ -284,12 +318,12 @@ export default function Sidebar() {
         </div>
 
         {/* Footer info */}
-        <div className="pt-4 border-t border-white/10 space-y-2">
-          <div className="p-2.5 rounded-xl bg-slate-900/80 border border-white/5 space-y-1">
-            <div className="text-[10px] text-slate-400 font-semibold">LedgerERP & CRM Cloud</div>
-            <div className="text-[10px] font-mono text-emerald-400 flex items-center space-x-1">
-              <Zap className="w-3 h-3 text-amber-400" />
-              <span>Elixir TDHP Finans Motoru</span>
+        <div className="pt-4 border-t border-slate-200 dark:border-white/10 space-y-2">
+          <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-white/5 space-y-1">
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">LedgerERP Suite</div>
+            <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
+              <Zap className="w-3 h-3 text-amber-500" />
+              <span>Elixir & Phoenix Socket</span>
             </div>
           </div>
         </div>
