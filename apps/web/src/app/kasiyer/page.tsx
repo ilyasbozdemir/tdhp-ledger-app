@@ -161,15 +161,41 @@ export default function CashierPOSPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+      <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-4">
         <div>
-          <h1 className="text-xl font-bold text-white flex items-center space-x-2">
-            <ShoppingCart className="w-5 h-5 text-emerald-400" />
-            <span>Kasiyer / POS Hızlı Satış Ekranı</span>
+          <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+            <ShoppingCart className="w-5 h-5 text-emerald-500" />
+            <span>Kasiyer / POS Hızlı Satış Terminali</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Otomatik Borç/Alacak dengeli Satış (FA) Fişi oluşturan hızlı ödeme terminali.
           </p>
+        </div>
+      </div>
+
+      {/* Desktop POS App Download & Launcher Callout Banner */}
+      <div className="glass-panel rounded-2xl p-5 border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 via-teal-950/20 to-slate-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30">
+            <Sparkles className="w-3 h-3" />
+            <span>Masaüstü POS & Hardware Entegrasyonu</span>
+          </div>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+            Çevrimdışı Barkod & Termal Yazıcı Desteği İçin Masaüstü Uygulamasını Kullanın
+          </h3>
+          <p className="text-xs text-slate-400">
+            Termal Fiş Yazıcısı, Barkod Okuyucu ve Yazar Kasa donanım erişimi için Electron masaüstü sürümünü başlatın.
+          </p>
+        </div>
+
+        <div className="flex items-center space-x-3 shrink-0">
+          <button
+            onClick={() => alert("Masaüstü POS Uygulaması Başlatma Talimatı:\nKök dizinde 'pnpm dev:desktop' komutunu çalıştırarak Electron POS terminalini açabilirsiniz.")}
+            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-lg shadow-emerald-600/20 transition-all hover:scale-105 flex items-center space-x-2"
+          >
+            <Printer className="w-4 h-4" />
+            <span>Masaüstü POS İndir / Başlat (.exe)</span>
+          </button>
         </div>
       </div>
 
