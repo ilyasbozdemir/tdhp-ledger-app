@@ -2,7 +2,9 @@
   "name": "tdhp-ledger-app",
   "private": true,
   "scripts": {
-    "dev": "pnpm dev:web",
+    "dev": "node scripts/dev-all.js",
+    "dev:all": "node scripts/dev-all.js",
+    "api:init": "node scripts/init-api.js",
     "dev:web": "pnpm --filter web dev",
     "build:web": "pnpm --filter web build",
     "dev:backend": "cd apps/backend && mix phx.server",
