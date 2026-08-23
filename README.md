@@ -5,43 +5,44 @@ mimarisine sahip **Tek Düzen Hesap Planı (TDHP)** tabanlı muhasebe ve defter
 yönetim platformu.
 
 ![Architecture](https://img.shields.io/badge/Architecture-Monorepo-blue)
-![Backend](https://img.shields.io/badge/Backend-Elixir_1.18_%7C_Phoenix_1.8-purple)
+![Queue](https://img.shields.io/badge/Queue-RabbitMQ_3-orange)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL_16-blue)
+![Backend](https://img.shields.io/badge/Backend-Elixir_1.18_%7C_Phoenix_1.8-purple)
 ![Frontend](https://img.shields.io/badge/Frontend-Next.js_15_%7C_Tailwind_CSS-black)
 ![Desktop](https://img.shields.io/badge/Desktop-Electron_34-teal)
 
 ---
 
-## 📐 Sistem Mimarisi & Sorumlulukların Ayrılması (SoC)
+## 📐 Sistem Mimarisi & Sorumlulukların Ayrılması (SoC - PaaS Layout)
 
-Sistem tamamen sorumlulukları ayrılmış (Separation of Concerns) ve çoklu istemci
-desteğine sahip bir mimaride tasarlanmıştır:
+Sistem PaaS / Cloud-Native prensiplerine uygun olarak Docker Compose konteynerlerinde çalışır:
 
 ```
-+-------------------------------------+
-|  Electron Masaüstü (apps/desktop)   |
-+------------------+------------------+
-                   |
-+------------------v------------------+
-|    Next.js Web App (apps/web)       |
-| (Kasiyer POS + Muhasebe Dashboard)  |
-+------------------+------------------+
-                   | REST API & WebSockets (ws://)
-                   v
-+-------------------------------------+
-|  Elixir Phoenix Engine (apps/backend)|
-|                                     |
-|  • Fiş Motoru (Atomik Ecto.Multi)   |
-|  • 9 Sınıflı TDHP Kuralları (D/C)   |
-|  • Defter-i Kebir & Muavin Engine   |
-|  • Canlı Mizan & KDV Mahsubu        |
-|  • Phoenix Channels Real-time Sync  |
-+------------------+------------------+
-                   | Ecto Repo
-                   v
-+-------------------------------------+
-|         PostgreSQL Database         |
-+-------------------------------------+
+                                 +-------------------------------------+
+                                 |  Electron Masaüstü (apps/desktop)   |
+                                 +------------------+------------------+
+                                                    |
+                                 +------------------v------------------+
+                                 |    Next.js Web App (apps/web)       |
+                                 | (Kasiyer POS + Muhasebe Dashboard)  |
+                                 +------------------+------------------+
+                                                    | REST API & WebSockets (ws://)
+                                                    v
+                                 +-------------------------------------+
+                                 |  Elixir Phoenix Engine (apps/backend)|
+                                 |                                     |
+                                 |  • Fiş Motoru (Atomik Ecto.Multi)   |
+                                 |  • 9 Sınıflı TDHP Kuralları (D/C)   |
+                                 |  • Defter-i Kebir & Muavin Engine   |
+                                 |  • Canlı Mizan & KDV Mahsubu        |
+                                 |  • Phoenix Channels Real-time Sync  |
+                                 |  • Async Queue Event Dispatcher     |
+                                 +---------+-----------------+---------+
+                                           |                 |
+                                 +---------v-------+ +-------v---------+
+                                 |   PostgreSQL    | |    RabbitMQ     |
+                                 | Database (5433) | | Queue (15672/UI)|
+                                 +-----------------+ +-----------------+
 ```
 
 ---
