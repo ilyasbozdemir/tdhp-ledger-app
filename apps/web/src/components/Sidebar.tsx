@@ -32,10 +32,13 @@ import {
   Target,
   Sun,
   Moon,
-  ArrowLeftRight
+  ArrowLeftRight,
+  CheckCircle2,
+  LogOut
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { socketManager } from "@/lib/phoenix-socket";
+import { MOCK_USER } from "@/lib/mock-data";
 
 interface SubMenuItem {
   name: string;
@@ -87,7 +90,7 @@ export default function Sidebar() {
       name: "CRM & Müşteri Yönetimi",
       icon: Handshake,
       subMenus: [
-        { name: "Müşteri Portföyü", href: "/crm", icon: Handshake, badge: "Müşteriler" },
+        { name: "CRM Müşteri Portföyü", href: "/crm", icon: Handshake, badge: "Müşteriler" },
         { name: "Satış Fırsatları & Teklifler", href: "/teklifler", icon: Target, badge: "Pipeline" },
         { name: "Tedarikçi Kartları", href: "/crm", icon: Building2, badge: "Tedarikçiler" },
       ],
@@ -267,6 +270,22 @@ export default function Sidebar() {
         }`}
       >
         <div className="space-y-5">
+          {/* Company Selection Header */}
+          <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 flex items-center justify-between">
+            <div className="flex items-center space-x-2.5 truncate">
+              <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
+                TL
+              </div>
+              <div className="truncate">
+                <div className="text-[11px] font-bold text-slate-900 dark:text-white truncate">{MOCK_USER.company}</div>
+                <div className="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center space-x-1">
+                  <CheckCircle2 className="w-2.5 h-2.5" />
+                  <span>Aktif Şirket Desteği</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Active Main Module Header */}
           <div className="border-b border-slate-200 dark:border-white/10 pb-3 flex items-center justify-between">
             <div className="truncate">
@@ -329,14 +348,34 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        {/* Footer info */}
-        <div className="pt-4 border-t border-slate-200 dark:border-white/10 space-y-2">
-          <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-white/5 space-y-1">
-            <div className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">LedgerERP Suite</div>
-            <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
-              <Zap className="w-3 h-3 text-amber-500" />
-              <span>Elixir & Phoenix Socket</span>
+        {/* Authenticated User Profile Card Footer */}
+        <div className="pt-4 border-t border-slate-200 dark:border-white/10 space-y-3">
+          <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 flex items-center justify-between group">
+            <div className="flex items-center space-x-3 truncate">
+              {/* User Avatar */}
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-md shrink-0">
+                {MOCK_USER.avatar}
+              </div>
+              <div className="truncate">
+                <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center space-x-1.5">
+                  <span className="truncate">{MOCK_USER.name}</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" title="Oturum Açık" />
+                </div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{MOCK_USER.role}</div>
+              </div>
             </div>
+
+            <button
+              onClick={() => alert("Oturum kapatma veya profil yönetimi penceresi.")}
+              className="text-slate-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-white/5 transition-colors shrink-0"
+              title="Oturumu Kapat"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="text-[10px] text-center text-slate-400 font-mono">
+            Elixir & PostgreSQL Cloud Engine
           </div>
         </div>
       </aside>
