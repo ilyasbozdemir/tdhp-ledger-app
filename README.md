@@ -1,6 +1,6 @@
-# 🏢 TDHP Ledger App (Türkiye Denetim Heyeti Hesap Planı Motoru)
+# 🏢 TDHP Ledger App (Tek Düzen Hesap Planı Motoru)
 
-Modern, yüksek performanslı, atomik fiş motoruna ve gerçek zamanlı WebSocket mimarisine sahip **Türkiye Denetim Heyeti Hesap Planı (TDHP)** tabanlı muhasebe ve defter yönetim platformu.
+Modern, yüksek performanslı, atomik fiş motoruna ve gerçek zamanlı WebSocket mimarisine sahip **Tek Düzen Hesap Planı (TDHP)** tabanlı muhasebe ve defter yönetim platformu.
 
 ![Architecture](https://img.shields.io/badge/Architecture-Monorepo-blue)
 ![Backend](https://img.shields.io/badge/Backend-Elixir_1.18_%7C_Phoenix_1.8-purple)

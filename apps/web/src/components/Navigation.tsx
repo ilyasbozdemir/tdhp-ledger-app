@@ -54,7 +54,7 @@ export default function Navigation() {
                 Elixir Core
               </span>
             </div>
-            <p className="text-xs text-slate-400">Türkiye Denetim Heyeti Hesap Planı Engine</p>
+            <p className="text-xs text-slate-400">Tek Düzen Hesap Planı Engine</p>
           </div>
         </Link>
 

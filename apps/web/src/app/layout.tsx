@@ -3,7 +3,7 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 
 export const metadata: Metadata = {
-  title: "TDHP Ledger System | Türkiye Denetim Heyeti Muhasebe Engine",
+  title: "TDHP Ledger System | Tek Düzen Hesap Planı Engine",
   description: "Elixir Phoenix backend ve Next.js frontend ile gerçek zamanlı 9 sınıflı TDHP muhasebe ve defter yönetim platformu.",
 };
 
