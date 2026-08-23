@@ -32,7 +32,8 @@ import {
   Target,
   FileSpreadsheet,
   Sun,
-  Moon
+  Moon,
+  ArrowLeftRight
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { socketManager } from "@/lib/phoenix-socket";
@@ -87,21 +88,19 @@ export default function Sidebar() {
       name: "CRM & Müşteri Yönetimi",
       icon: Handshake,
       subMenus: [
-        { name: "CRM Ana Modül", href: "/crm", icon: Handshake, badge: "CRM" },
-        { name: "Müşteri Portföyü (120)", href: "/defterler", icon: Building, badge: "Cari" },
-        { name: "Tedarikçiler (320)", href: "/defterler", icon: Building2 },
-        { name: "Satış Fırsatları", href: "/crm", icon: Target },
-        { name: "Teklif & Sözleşmeler", href: "/crm", icon: FileSpreadsheet },
+        { name: "CRM Müşteri Portföyü", href: "/crm", icon: Handshake, badge: "CRM 120" },
+        { name: "Satış Fırsatları & Teklifler", href: "/teklifler", icon: Target, badge: "Pipeline" },
+        { name: "Tedarikçi Kartları (320)", href: "/crm", icon: Building2 },
       ],
     },
     {
       id: "inventory",
-      name: "Stok & Depo Yönetimi",
+      name: "Stok & Depo (ERP)",
       icon: Boxes,
       subMenus: [
-        { name: "Stok & Ürün Yönetimi", href: "/stok", icon: Package, badge: "Stok 153" },
+        { name: "Stok & Ürün Kartları (153)", href: "/stok", icon: Package, badge: "Stok 153" },
         { name: "Kasiyer POS Terminali", href: "/kasiyer", icon: ShoppingCart, badge: "Hızlı POS" },
-        { name: "Depo & Şube Transferleri", href: "/stok", icon: Boxes },
+        { name: "Depo Transferleri & Lojistik", href: "/depo", icon: ArrowLeftRight, badge: "Depo" },
       ],
     },
     {
@@ -109,7 +108,7 @@ export default function Sidebar() {
       name: "Ödeme & Tahsilat",
       icon: CreditCard,
       subMenus: [
-        { name: "Ödeme & Tahsilat Ekranı", href: "/odemeler", icon: CreditCard, badge: "ÖD / TH" },
+        { name: "Ödeme & Tahsilat Fişleri", href: "/odemeler", icon: CreditCard, badge: "ÖD / TH" },
         { name: "100 Kasa Defteri", href: "/defterler", icon: Wallet },
         { name: "102 Banka Defteri", href: "/defterler", icon: Landmark },
       ],
@@ -134,11 +133,21 @@ export default function Sidebar() {
       ],
     },
     {
+      id: "hr",
+      name: "HRM & Bordro Yönetimi",
+      icon: Users,
+      subMenus: [
+        { name: "Personel & İK Modülü", href: "/hrm", icon: UserCheck, badge: "HRM" },
+        { name: "Personele Borçlar (335)", href: "/hrm", icon: Briefcase, badge: "Bordro" },
+      ],
+    },
+    {
       id: "reports",
       name: "Mali Raporlar & Analiz",
       icon: BarChart3,
       subMenus: [
         { name: "Canlı Mizan", href: "/mizan", icon: Zap, badge: "WebSocket" },
+        { name: "İş Zekası & Analitik", href: "/analitik", icon: BarChart3, badge: "BI" },
         { name: "Defter-i Kebir (Büyük Defter)", href: "/defterler", icon: BookOpen },
         { name: "Muavin (Cari) Defter", href: "/defterler", icon: Users },
         { name: "KDV Mahsuplaştırması", href: "/mizan", icon: Receipt },
@@ -189,7 +198,7 @@ export default function Sidebar() {
           <Link
             href="/"
             className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-violet-500 flex items-center justify-center shadow-lg shadow-blue-500/20 hover:scale-105 transition-transform"
-            title="LedgerERP & CRM Suite"
+            title="LedgerERP, CRM & HRM Suite"
           >
             <Building2 className="w-5 h-5 text-white" />
           </Link>
@@ -263,7 +272,7 @@ export default function Sidebar() {
           <div className="border-b border-slate-200 dark:border-white/10 pb-3 flex items-center justify-between">
             <div className="truncate">
               <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">
-                ERP / CRM Modülü
+                ERP / CRM / HRM Modülü
               </div>
               <h2 className="text-xs font-bold text-slate-900 dark:text-white flex items-center space-x-2 truncate">
                 <activeModule.icon className="w-4 h-4 text-blue-500 dark:text-blue-400 shrink-0" />
