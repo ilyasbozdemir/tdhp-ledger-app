@@ -156,7 +156,7 @@ export default function VouchersPage() {
         <div>
           <h1 className="text-xl font-bold text-white flex items-center space-x-2">
             <FileText className="w-5 h-5 text-blue-400" />
-            <span>Fiş Motoru (Voucher Engine)</span>
+            <span>Muhasebe Fiş İşlemleri (Vouchers)</span>
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
             Otomatik Borç=Alacak Denge Kontrollü ve Ecto.Multi Atomik Nakil Motoru.

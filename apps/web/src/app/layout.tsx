@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
+import Sidebar from "@/components/Sidebar";
 
 export const metadata: Metadata = {
   title: "TDHP Ledger System | Tek Düzen Hesap Planı Engine",
@@ -14,9 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" className="dark">
-      <body className="antialiased bg-[#0B0F17] text-slate-100 min-h-screen">
-        <Navigation />
-        <main className="max-w-7xl mx-auto px-4 lg:px-8 py-8">{children}</main>
+      <body className="antialiased bg-[#0B0F17] text-slate-100 min-h-screen flex">
+        <Sidebar />
+        <main className="flex-1 max-w-7xl mx-auto px-6 py-8 overflow-x-hidden">{children}</main>
       </body>
     </html>
   );
