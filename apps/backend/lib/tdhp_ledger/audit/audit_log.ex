@@ -2,6 +2,7 @@ defmodule TdhpLedger.Audit.AuditLog do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:id, :entity_type, :entity_id, :action, :payload, :actor, :inserted_at]}
   schema "audit_logs" do
     field :entity_type, :string
     field :entity_id, :string

@@ -2,6 +2,7 @@ defmodule TdhpLedger.Vouchers.VoucherLine do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:id, :voucher_id, :account_id, :current_account_id, :debit, :credit, :description, :account, :current_account, :inserted_at, :updated_at]}
   schema "voucher_lines" do
     field :debit, :decimal, default: Decimal.new("0.0")
     field :credit, :decimal, default: Decimal.new("0.0")

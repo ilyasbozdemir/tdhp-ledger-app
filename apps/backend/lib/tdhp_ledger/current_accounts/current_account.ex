@@ -2,6 +2,7 @@ defmodule TdhpLedger.CurrentAccounts.CurrentAccount do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:id, :code, :title, :type, :tax_number, :tax_office, :phone, :address, :account_id, :account, :inserted_at, :updated_at]}
   schema "current_accounts" do
     field :code, :string
     field :title, :string
